@@ -1,37 +1,31 @@
 # 2D Projectile Trajectory Simulator
 
-A C++ physics simulator that models projectile motion under gravity and air resistance, with live animated visualization.
+A C++ simulator that models a projectile's flight under gravity and air resistance, with a live animated view of the trajectory.
 
-## What it does
+## Overview
 
-- Simulates a projectile launched with an initial velocity, affected by gravity and quadratic air drag
-- Uses RK4 (4th-order Runge-Kutta) integration for numerically accurate motion, rather than simple Euler integration
-- Renders the motion live in an animated window using SFML
-- Exports trajectory data to CSV, with a Python (matplotlib) script for plotting the arc separately
+I built this to teach myself C++ and get some hands-on numerical simulation experience ahead of studying aerospace engineering. It models a 2D projectile subject to gravity and drag, using RK4 integration, and renders the motion live with SFML.
 
-## Physics model
+## Physics
 
-- **Gravity:** constant downward acceleration (-9.8 m/s²)
-- **Drag:** calculated using the real drag equation, `F = 0.5 * air_density * v^2 * drag_coefficient * area`, opposing the direction of motion. This scales with velocity squared, unlike a simplified linear approximation.
-- **Integration:** RK4 samples the rate of change four times per time step (start, two midpoints, end) and combines them with a weighted average, which is significantly more accurate than Euler integration for the same time step size — especially when forces change rapidly.
+- Gravity is constant (-9.8 m/s²)
+- Drag uses the actual drag equation (0.5 * air density * v² * drag coefficient * area), so it scales with speed squared rather than being a flat percentage each step
+- Motion is integrated using RK4 instead of basic Euler stepping, since RK4 samples the rate of change at four points per step instead of one, which reduces error — especially when forces change quickly within a step
 
-## What I learned
+At the timestep and speeds I'm using here, Euler and RK4 end up looking almost identical. That's expected — RK4's advantage really shows up with bigger timesteps or faster-changing forces, so this was more about implementing it properly than seeing a dramatic visual difference.
 
-This was my first real C++ project. Along the way I learned:
-- Core C++ (variables, loops, functions, structs)
-- Why numerical integration method choice matters, and when RK4's accuracy advantage actually shows up (mainly at larger time steps or rapidly-changing forces — at this simulation's scale, RK4 and Euler look visually similar, which is itself a useful finding)
-- Working with a real graphics library (SFML) and the basics of a render loop
-- Git/GitHub workflow for version control
+## What's here
 
-## Limitations / possible extensions
-
-- 2D only — a real trajectory/orbital mechanics simulator would need 3D
-- Assumes constant air density (real air density decreases with altitude)
-- Single rigid body — no rotation, wind, or multi-stage effects
-- Fixed drag coefficient and area — could be extended to accept different projectile shapes
+- `window_test.cpp` — the live animated simulation (SFML)
+- `demo.cpp` — earlier CLI version that exports trajectory data to CSV
+- `plot.py` — plots the CSV output with matplotlib
 
 ## Running it
 
-Requires g++ and SFML:sudo apt install libsfml-dev
+You'll need g++ and SFML installed:sudo apt install libsfml-dev
 g++ window_test.cpp -o window_test -lsfml-graphics -lsfml-window -lsfml-system
 ./window_test
+
+## Limitations
+
+This is a simplified 2D model — no altitude-dependent air density, no wind, no rotation or multi-stage effects. Good next steps would be extending it to 3D and adding a proper atmosphere model.
