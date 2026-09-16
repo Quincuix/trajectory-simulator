@@ -30,4 +30,4 @@ g++ window_test.cpp -o window_test -lsfml-graphics -lsfml-window
 
 ## Limitations
 
-This is a simplified 2D model; which does not include altitude-dependent air density, wind, rotation or multi-stage effects. 
+This is a simplified 2D model; which does not include altitude-dependent air density, wind, rotation or multi-stage effects.
